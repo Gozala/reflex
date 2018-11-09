@@ -4,8 +4,10 @@ import { nothing } from "./Basics.js"
 
 /*::
 import type { IO, Thread, ThreadID, Main } from "./Widget"
-import type { Task } from "./Future"
 
+interface Task<x, a> {
+  call(): Promise<a>
+}
 
 export interface Effect <a> extends IO<a> {
   map <b>(a => b):Effect<b>;
@@ -34,16 +36,16 @@ class Send /*::<a> implements Effect<a>*/ {
   }
 }
 
-class FX /*::<a, value>*/ {
+class FX /*::<x, a, value>*/ {
   /*::
-  task:Task<value>
+  task:Task<x, value>
   onOk: value => ?a
-  onError: Error => ?a
+  onError: x => ?a
   */
   constructor(
-    task /*:Task<value>*/,
+    task /*:Task<x, value>*/,
     onOk /*: value => ?a*/,
-    onError /*: Error => ?a*/
+    onError /*: x => ?a*/
   ) {
     this.task = task
     this.onOk = onOk
@@ -51,7 +53,7 @@ class FX /*::<a, value>*/ {
   }
   async execute(main /*:Main<a>*/) {
     try {
-      const value = await this.task.perform()
+      const value = await this.task.call()
       const message = this.onOk(value)
       if (message != null) {
         main.send(message)
@@ -121,10 +123,10 @@ export class Tagged /*::<a, b>*/ {
 
 export const nofx = none
 
-export const fx = /*::<value, message>*/ (
-  task /*:Task<value>*/,
-  ok /*:value => ?message*/ = nothing,
-  error /*:Error => ?message*/ = warn
+export const fx = /*::<a, message>*/ (
+  task /*:Task<mixed, a>*/,
+  ok /*:a => ?message*/ = nothing,
+  error /*:mixed => ?message*/ = warn
 ) /*:Effect<message>*/ => new FX(task, ok, error)
 
 export const send = /*::<a>*/ (message /*:a*/) /*:Effect<a>*/ =>
@@ -133,6 +135,6 @@ export const send = /*::<a>*/ (message /*:a*/) /*:Effect<a>*/ =>
 export const batch = /*::<a>*/ (...fx /*:Effect<a>[]*/) /*:Effect<a>*/ =>
   new Batch(fx)
 
-const warn = (error /*:Error*/) /*:void*/ => {
+const warn = (error /*:mixed*/) /*:void*/ => {
   console.warn("Task failed but error was not handled", error)
 }

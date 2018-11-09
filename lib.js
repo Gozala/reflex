@@ -9,8 +9,6 @@ import * as Document from "./Document.js"
 import * as Application from "./Application.js"
 
 import * as Effect from "./Effect.js"
-import * as Navigation from "./Navigation.js"
-import { future } from "./Future.js"
 import { identity, never, always, nothing } from "./Basics.js"
 
 export {
@@ -24,8 +22,6 @@ export {
   Application,
   // Effect System
   Effect,
-  future,
-  Navigation,
   // Utilities
   identity,
   never,

@@ -1,0 +1,101 @@
+// @flow strict
+
+export interface Doc<a> {
+  title: string;
+  body: Node<a>;
+
+  map<b>((a) => b): Doc<b>;
+}
+
+declare export class Node<a> {
+  settings(): Attribute<a>[];
+  children(): Node<a>[];
+  map<b>((a) => b): Node<b>;
+}
+declare export class Attribute<a> {
+  map<b>((a) => b): Attribute<b>;
+}
+export type KeyedNode<a> = [string, Node<a>]
+
+declare export function node<a>(
+  localName: string,
+  attributes?: Attribute<a>[],
+  children?: Node<a>[]
+): Node<a>
+
+declare export function customElement<a>(
+  localName: string,
+  constructor: Class<HTMLElement>,
+  attributes?: Attribute<a>[]
+): Node<a>
+
+declare export function keyedNode<a>(
+  localName: string,
+  attributes?: Attribute<a>[],
+  children?: KeyedNode<a>[]
+): Node<a>
+
+declare export function keyedNodeNS<a>(
+  namespace: string,
+  localName: string,
+  attributes?: Attribute<a>[],
+  children?: KeyedNode<a>[]
+): Node<a>
+
+declare export function nodeNS<a>(
+  namespace: string,
+  localName: string,
+  attributes?: Attribute<a>[],
+  children?: Node<a>[]
+): Node<a>
+
+declare export function text<a>(string): Node<a>
+declare export function doc<a>(title: string, body: Node<a>): Doc<a>
+
+declare export function property<a>(name: string, value: mixed): Attribute<a>
+declare export function attribute<a>(
+  name: string,
+  value: null | string
+): Attribute<a>
+declare export function attributeNS<a>(
+  namespace: string,
+  name: string,
+  value: string | boolean | number | null | void
+): Attribute<a>
+declare export function style<a>(string, string): Attribute<a>
+
+export interface Decoder<inn, out> {
+  decode(inn): out | Error;
+}
+
+export type EncodedEvent =
+  | Event
+  | DragEvent
+  | MouseEvent
+  | KeyboardEvent
+  | UIEvent
+
+// Note: Doing optional fields fails Decoder.flow.
+// Doing more fancy unions prevents flow from proper inference.
+export type DecodedEvent<a> =
+  | { message: a }
+  | { preventDefault: boolean }
+  | { stopPropagation: boolean }
+  | { message: a, preventDefault: boolean }
+  | { message: a, stopPropagation: boolean }
+  | { message: a, preventDefault: boolean, stopPropagation: boolean }
+
+export type EventDecoder<a> = Decoder<EncodedEvent, DecodedEvent<a>>
+
+declare export function on<a>(string, EventDecoder<a>): Attribute<a>
+
+declare export opaque type Delta
+export interface Port<a> { send(a): mixed }
+declare export function diff<a>(Node<a>, Node<a>): Delta
+declare export function patch<a>(
+  root: EventTarget,
+  current: Node<a>,
+  delta: Delta,
+  port: Port<a>
+): void
+declare export function virtualize<a>(EventTarget): Node<a>

@@ -124,7 +124,7 @@ export class Tagged /*::<a, b>*/ {
 export const nofx = none
 
 export const fx = /*::<a, message>*/ (
-  task /*:Task<mixed, a>*/,
+  task /*:Task<mixed, a> | () => Promise<a>*/,
   ok /*:a => ?message*/ = nothing,
   error /*:mixed => ?message*/ = warn
 ) /*:Effect<message>*/ => new FX(task, ok, error)

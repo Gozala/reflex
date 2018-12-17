@@ -5,7 +5,7 @@ import { nothing } from "./Basics.js"
 /*::
 import type { IO, Thread, ThreadID, Main } from "./Widget"
 
-interface Task<x, a> {
+export interface Task<x, a> {
   call(): Promise<a>
 }
 
@@ -123,10 +123,10 @@ export class Tagged /*::<a, b>*/ {
 
 export const nofx = none
 
-export const fx = /*::<a, message>*/ (
-  task /*:Task<mixed, a> | () => Promise<a>*/,
+export const fx = /*::<x, a, message>*/ (
+  task /*:Task<x, a> | () => Promise<a>*/,
   ok /*:a => ?message*/ = nothing,
-  error /*:mixed => ?message*/ = warn
+  error /*:x => ?message*/ = warn
 ) /*:Effect<message>*/ => new FX(task, ok, error)
 
 export const send = /*::<a>*/ (message /*:a*/) /*:Effect<a>*/ =>

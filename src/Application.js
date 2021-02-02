@@ -1,24 +1,9 @@
-// @flow strict
-
 import { DocumentWidget } from "./Document.js"
 
 /**
  * @template T
  * @typedef {import('./Program').DocumentView<T>} DocumentView
  */
-import type { Doc, Node, Program, Widget, Transaction } from "./Document.js"
-
-export type { Node, Program, Transaction, Widget, Doc }
-
-export type Application/*:: <message, state, options> */ = {
-  +onExternalURLRequest: URL => message,
-  +onInternalURLRequest: URL => message,
-  +onURLChange: URL => message,
-
-  +init: (options, URL) => Transaction/*:: <message, state> */,
-  +update: (message, state) => Transaction/*:: <message, state> */,
-  +view: state => Doc/*:: <message> */
-}
 /**
  * @template Message, State
  * @extends {DocumentWidget<Message, State>}
@@ -82,11 +67,15 @@ class ApplicationWidget extends DocumentWidget {
    * @param {Document} document
    */
   addListeners(document) {
-    const top = /** @type {Window} */ document.defaultView
-    top.addEventListener("popstate", this)
-    top.addEventListener("hashchange", this)
-    // @ts-ignore
-    top.onnavigate = this
+    const top = document.defaultView
+    if (top) {
+      top.addEventListener("popstate", this)
+      top.addEventListener("hashchange", this)
+      // @ts-ignore
+      top.onnavigate = this
+    } else {
+      throw new Error("document.defaultView is not defined")
+    }
   }
 }
 

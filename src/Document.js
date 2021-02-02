@@ -3,20 +3,6 @@
 import { virtualize, diff, patch, doc } from "./VirtualDOM.js"
 import { Widget, MainThread } from "./Widget.js"
 
-import type { Program, MainThread, Transaction } from "./widget.js"
-import type { Node, Doc } from "./VirtualDOM.js"
-
-export type { Node, Doc, Program, Widget, Transaction }
-
-export type Root = {
-  body: Element,
-  title: string,
-  location: Location,
-  widget: ?{
-    node: Doc/*:: <any> */,
-    thread: MainThread/*:: <any> */
-  }
-}
 /**
  * @template Message
  * @typedef {import('./Program').DocumentView<Message>} DocumentView

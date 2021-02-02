@@ -66,7 +66,8 @@ export class MainThread {
 
     const id = `@${++this.threadID}`
     this.threads[id] = thread
-    return /** @type {ThreadID} */ id
+    // @ts-expect-error - string isn't ThreadID
+    return id
   }
 
   /**

@@ -1,5 +1,3 @@
-// @flow strict
-
 /**
  * @template T
  * @param {T} value

@@ -9,7 +9,7 @@
     "UI"
   ],
   "author": "Irakli Gozalishvili <dev@gozala.io>",
-  "main": "reflex",
+  "main": "./src/lib.js",
   "devDependencies": {
     "typescript": "4.2.0-beta",
     "tape-es": "git://github.com/gozala/tape-es",

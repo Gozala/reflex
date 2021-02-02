@@ -1,13 +1,5 @@
-//@flow strict
-
 import { node, text, doc, keyedNode, customElement } from "./VirtualDOM.js"
-import type { Node, Attribute } from "./VirtualDOM.js"
-interface Factory {
-  /*:: <a> */(
-    attributes?: Attribute/*:: <a> */[],
-    children?: Node/*:: <a> */[]
-  ): Node/*:: <a> */;
-}
+
 /**
  * @param {string} tag
  */

@@ -1,5 +1,3 @@
-// @flow strict
-
 import * as DOM from "./VirtualDOM.js"
 import * as Element from "./Element.js"
 import * as Attribute from "./Attribute.js"

@@ -1,17 +1,23 @@
 //@flow strict
 
 import { node, text, doc, keyedNode, customElement } from "./VirtualDOM.js"
-/*::
 import type { Node, Attribute } from "./VirtualDOM.js"
 interface Factory {
-  <a>(attributes?:Attribute<a>[], children?:Node<a>[]):Node<a>
+  /*:: <a> */(
+    attributes?: Attribute/*:: <a> */[],
+    children?: Node/*:: <a> */[]
+  ): Node/*:: <a> */;
 }
-*/
-
-const factory = (tag) /*:Factory*/ => /*::<a>*/ (
-  settings /*::?:Attribute<a>[]*/,
-  children /*::?:Node<a>[]*/
-) /*:Node<a>*/ => node(tag, settings, children)
+/**
+ * @param {string} tag
+ */
+const factory = tag =>
+  /**
+   * @template T
+   * @param {import('./VirtualDOM').Attribute<T>[]} [settings]
+   * @param {import('./VirtualDOM').Node<T>[]} [children]
+   */
+  (settings, children) => node(tag, settings, children)
 
 export { text, node, doc, customElement, keyedNode }
 export const html = factory("html")

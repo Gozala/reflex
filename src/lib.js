@@ -9,7 +9,7 @@ import * as Document from "./Document.js"
 import * as Application from "./Application.js"
 
 import * as Effect from "./Effect.js"
-import { identity, never, always, nothing } from "./Basics.js"
+import { identity, unreachable, always, nothing } from "./Basics.js"
 
 export {
   // DOM
@@ -24,7 +24,7 @@ export {
   Effect,
   // Utilities
   identity,
-  never,
+  unreachable,
   always,
   nothing
 }

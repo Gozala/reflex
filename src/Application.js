@@ -2,31 +2,44 @@
 
 import { DocumentWidget } from "./Document.js"
 
-/*::
+/**
+ * @template T
+ * @typedef {import('./Program').DocumentView<T>} DocumentView
+ */
 import type { Doc, Node, Program, Widget, Transaction } from "./Document.js"
 
 export type { Node, Program, Transaction, Widget, Doc }
 
-export type Application<message, state, options> = {
-  +onExternalURLRequest: (URL) => message;
-  +onInternalURLRequest: (URL) => message;
-  +onURLChange: (URL) => message;
+export type Application/*:: <message, state, options> */ = {
+  +onExternalURLRequest: URL => message,
+  +onInternalURLRequest: URL => message,
+  +onURLChange: URL => message,
 
-  +init: (options, URL) => Transaction<message, state>;
-  +update: (message, state) => Transaction<message, state>;
-  +view: (state) => Doc<message>;
+  +init: (options, URL) => Transaction/*:: <message, state> */,
+  +update: (message, state) => Transaction/*:: <message, state> */,
+  +view: state => Doc/*:: <message> */
 }
-*/
-
-class ApplicationWidget /*::<a, model, config>*/ extends DocumentWidget /*::<a, model, config>*/ {
-  /*::
-  onExternalURLRequest: (URL) => a;
-  onInternalURLRequest: (URL) => a;
-  onURLChange: (URL) => a;
-  */
+/**
+ * @template Message, State
+ * @extends {DocumentWidget<Message, State>}
+ */
+class ApplicationWidget extends DocumentWidget {
+  /**
+   *
+   * @param {import('./Program').Router<Message>} router
+   */
+  constructor(router) {
+    super()
+    this.onExternalURLRequest = router.onExternalURLRequest
+    this.onInternalURLRequest = router.onInternalURLRequest
+    this.onURLChange = router.onURLChange
+  }
   getURL() {
     return new URL(this.root.location.href)
   }
+  /**
+   * @param {MouseEvent} event
+   */
   handleEvent(event) {
     switch (event.type) {
       case "navigate": // manually notify when we do pushState replaceState
@@ -39,11 +52,14 @@ class ApplicationWidget /*::<a, model, config>*/ extends DocumentWidget /*::<a, 
           !event.metaKey &&
           !event.shiftKey &&
           event.button < 1 &&
+          // @ts-ignore
           !event.target.target &&
+          // @ts-ignore
           !event.target.download
         ) {
           event.preventDefault()
           const current = this.getURL()
+          // @ts-ignore
           const next = new URL(event.currentTarget.href, current.href)
 
           const isInternal =
@@ -59,34 +75,45 @@ class ApplicationWidget /*::<a, model, config>*/ extends DocumentWidget /*::<a, 
         }
       }
     }
+    return undefined
   }
-  addListeners(document /*:Document*/) {
-    const top = document.defaultView
+
+  /**
+   * @param {Document} document
+   */
+  addListeners(document) {
+    const top = /** @type {Window} */ document.defaultView
     top.addEventListener("popstate", this)
     top.addEventListener("hashchange", this)
+    // @ts-ignore
     top.onnavigate = this
   }
 }
 
-export const spawn = /*::<a, model, config>*/ (
-  application /*:Application<a, model, config>*/,
-  options /*:config*/,
-  document /*:Document*/
-) /*:ApplicationWidget<a, model, config>*/ => {
-  const self = new ApplicationWidget()
+/**
+ * @template {{url?:URL}} Options
+ * @template Message, State
+ * @param {import('./Program').Application<Message, State, DocumentView<Message>, Options>} application
+ * @param {Options} options
+ * @param {Document} document
+ * @returns {ApplicationWidget<Message, State>}
+ */
+export const spawn = (
+  application,
+  options,
+  document
+) /*: ApplicationWidget<a, model, config> */ => {
+  const self = new ApplicationWidget(application)
   const root = DocumentWidget.root(document)
   self.update = application.update
   self.view = application.view
-  self.onExternalURLRequest = application.onExternalURLRequest
-  self.onInternalURLRequest = application.onInternalURLRequest
-  self.onURLChange = application.onURLChange
   self.root = root
   self.node = root.widget ? root.widget.node : self.mount(root)
   self.thread = self.fork(root)
   root.widget = self
   self.addListeners(document)
-
-  self.transact(application.init(options, self.getURL()))
+  options.url = self.getURL()
+  self.transact(application.init(options))
 
   return self
 }

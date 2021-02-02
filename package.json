@@ -1,0 +1,32 @@
+{
+  "name": "reflex",
+  "version": "2.0.0",
+  "description": "Functional reactive UI library",
+  "keywords": [
+    "reflex",
+    "reactive",
+    "functional",
+    "UI"
+  ],
+  "author": "Irakli Gozalishvili <dev@gozala.io>",
+  "main": "reflex",
+  "devDependencies": {
+    "typescript": "4.2.0-beta",
+    "tape-es": "git://github.com/gozala/tape-es",
+    "husky": "^0.14.0",
+    "lint-staged": "^4.0.0",
+    "prettier": "^1.4.4"
+  },
+  "scripts": {
+    "test": "tape-es 'test/**/*.spec.js'",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --parser flow --no-semi --write",
+      "git add"
+    ]
+  },
+  "repository": "https://github.com/gozala/reflex",
+  "license": "MIT"
+}

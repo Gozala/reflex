@@ -1,4 +1,4 @@
-// @noflow
+// @ts-nocheck
 
 const TEXT = "VirtualDOM.Text"
 const NODE = "VirtualDOM.Node"
@@ -1155,10 +1155,10 @@ function diffFacts(x, y, category) {
           ? ""
           : null
         : category === SETTING_STYLE
-          ? ""
-          : category === SETTING_EVENT || category === SETTING_ATTRIBUTE
-            ? undefined
-            : { namespace: x[xKey].namespace, value: undefined }
+        ? ""
+        : category === SETTING_EVENT || category === SETTING_ATTRIBUTE
+        ? undefined
+        : { namespace: x[xKey].namespace, value: undefined }
 
       continue
     }

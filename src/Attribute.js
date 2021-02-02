@@ -1,45 +1,69 @@
 // @flow strict
 
 import { attribute, property, style, on } from "./VirtualDOM.js"
-/*::
-import type {Attribute} from "./VirtualDOM.js"
-*/
 
 export { style, attribute, property, on }
 // // TODO: defaultValue, defaultChecked, innerHTML, suppressContentEditableWarning, suppressHydrationWarning, style
 
-export const defaultValue = /*::<a>*/ (value /*:string*/) /*:Attribute<a>*/ =>
-  property("defaultValue", value)
+/**
+ * @template {string|number|boolean} T
+ * @param {T} value
+ */
+export const defaultValue = value => property("defaultValue", value)
 
-export const value = /*::<a>*/ (value /*:string*/) /*:Attribute<a>*/ =>
-  property("value", value)
+/**
+ * @template {string|number|boolean} T
+ * @param {T} value
+ */
+export const value = value => property("value", value)
 
-export const acceptCharset = /*::<a>*/ (value /*:string*/) /*:Attribute<a>*/ =>
-  property("accept-charset", value)
+/**
+ * @template {string} T
+ * @param {T} value
+ */
+export const acceptCharset = value => property("accept-charset", value)
 
-export const className = /*::<a>*/ (value /*:string*/) /*:Attribute<a>*/ =>
-  attribute("class", value)
+/**
+ * @template {string} T
+ * @param {T} value
+ */
+export const className = value => attribute("class", value)
 
-export const classList = /*::<a>*/ (
-  ...values /*:string[]*/
-) /*:Attribute<a>*/ => attribute("class", values.join(" "))
+/**
+ * @param  {string[]} values
+ */
+export const classList = (...values) => attribute("class", values.join(" "))
 
-export const textContent = /*::<a>*/ (value /*:string*/) /*:Attribute<a>*/ =>
-  property("textContent", value)
+/**
+ *
+ * @param {string} value
+ */
+export const textContent = value => property("textContent", value)
 
-export const For = /*::<a>*/ (value /*:string*/) /*:Attribute<a>*/ =>
-  attribute("for", value)
-export const Equiv = /*::<a>*/ (value /*:string*/) /*:Attribute<a>*/ =>
-  attribute("equiv", value)
+/**
+ * @param {string} value
+ */
+export const For = value => attribute("for", value)
 
-export const data = /*::<a>*/ (
-  name /*:string*/,
-  value /*:string*/
-) /*:Attribute<a>*/ => attribute(`data-${name}`, value)
+/**
+ * @param {string} value
+ */
+export const Equiv = value => attribute("equiv", value)
 
-const setHTMLAttribute = name => /*::<a>*/ (
-  value /*:string*/ = ""
-) /*:Attribute<a>*/ => attribute(name, value)
+/**
+ * @param {string} name
+ * @param {string} value
+ */
+export const data = (name, value) => attribute(`data-${name}`, value)
+
+/**
+ * @param {string} name
+ */
+const setHTMLAttribute = name =>
+  /**
+   * @param {string} [value]
+   */
+  (value = "") => attribute(name, value)
 
 export const src = setHTMLAttribute("src")
 export const srcset = setHTMLAttribute("srcset")
@@ -51,17 +75,27 @@ export const type = setHTMLAttribute("type")
 export const placeholder = setHTMLAttribute("placeholder")
 export const title = setHTMLAttribute("title")
 
-const setBooleanHTMLAttribute = name => /*::<a>*/ (
-  value /*:boolean*/
-) /*:Attribute<a>*/ => attribute(name, value ? "true" : "false")
+/**
+ * @param {string} name
+ */
+const setBooleanHTMLAttribute = name =>
+  /**
+   * @param {boolean} value
+   */
+  value => attribute(name, value ? "true" : "false")
 
 export const contentEditable = setBooleanHTMLAttribute("contenteditable")
 export const draggable = setBooleanHTMLAttribute("draggable")
 export const spellCheck = setBooleanHTMLAttribute("spellcheck")
 
-const setBooleanSVGAttribute = name => /*::<a>*/ (
-  value /*:boolean*/
-) /*:Attribute<a>*/ => attribute(name, value ? "true" : "false")
+/**
+ * @param {string} name
+ */
+const setBooleanSVGAttribute = name =>
+  /**
+   * @param {boolean} value
+   */
+  value => attribute(name, value ? "true" : "false")
 
 export const autoReverse = setBooleanSVGAttribute("autoReverse")
 export const externalResourcesRequired = setBooleanSVGAttribute(
@@ -69,9 +103,16 @@ export const externalResourcesRequired = setBooleanSVGAttribute(
 )
 export const preserveAlpha = setBooleanSVGAttribute("preserveAlpha")
 
-const setModalHTMLAttribute = name => /*::<a>*/ (
-  value /*:boolean*/ = true
-) /*:Attribute<a>*/ => attribute(name, value ? "" : null)
+/**
+ *
+ * @param {string} name
+ */
+const setModalHTMLAttribute = name =>
+  /**
+   *
+   * @param {boolean} [value]
+   */
+  (value = true) => attribute(name, value ? "" : null)
 
 export const allowFullScreen = setModalHTMLAttribute("allowfullscreen")
 export const async = setModalHTMLAttribute("async")
@@ -94,25 +135,42 @@ export const scoped = setModalHTMLAttribute("scoped")
 export const seamless = setModalHTMLAttribute("seamless")
 export const itemScope = setModalHTMLAttribute("itemscope")
 
-const setBooleanProperty = name => /*::<a>*/ (
-  value /*:boolean*/
-) /*:Attribute<a>*/ => property(name, value)
+/**
+ * @param {string} name
+ */
+const setBooleanProperty = name =>
+  /**
+   *
+   * @param {boolean} value
+   */
+  value => property(name, value)
 
 export const checked = setBooleanProperty("checked")
 export const multiple = setBooleanProperty("multiple")
 export const muted = setBooleanProperty("muted")
 export const selected = setBooleanProperty("selected")
 
-const setOptionalStringAttribute = name => /*::<a>*/ (
-  value /*:string*/ = ""
-) /*:Attribute<a>*/ => attribute(name, value)
+/**
+ * @param {string} name
+ */
+const setOptionalStringAttribute = name =>
+  /**
+   *
+   * @param {string} [value]
+   */
+  (value = "") => attribute(name, value)
 
 export const capture = setOptionalStringAttribute("capture")
 export const download = setOptionalStringAttribute("download")
 
-const setNumberAttribute = name => /*::<a>*/ (
-  value /*:number*/
-) /*:Attribute<a>*/ => attribute(name, `${value}`)
+/**
+ * @param {string} name
+ */
+const setNumberAttribute = name =>
+  /**
+   * @param {number} value
+   */
+  value => attribute(name, `${value}`)
 
 export const cols = setNumberAttribute("cols")
 export const rows = setNumberAttribute("rows")

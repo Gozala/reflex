@@ -9,17 +9,61 @@
     "UI"
   ],
   "author": "Irakli Gozalishvili <dev@gozala.io>",
-  "main": "./src/lib.js",
-  "devDependencies": {
-    "typescript": "4.2.0-beta",
-    "tape-es": "git://github.com/gozala/tape-es",
-    "husky": "^0.14.0",
-    "lint-staged": "^4.0.0",
-    "prettier": "^1.4.4"
-  },
   "scripts": {
-    "test": "tape-es 'test/**/*.spec.js'",
+    "prepare": "tsc --build",
+    "test:web": "playwright-test test/**/*.spec.js --cov && nyc report",
+    "test:node": "c8 --check-coverage --branches 85 --functions 70 --lines 80 mocha test/**/*.spec.js",
+    "test": "npm run test:node",
+    "typecheck": "tsc --build",
     "precommit": "lint-staged"
+  },
+  "type": "module",
+  "main": "src/lib.js",
+  "types": "./dist/src/lib.d.ts",
+  "devDependencies": {
+    "typescript": "^4.6.3",
+    "@types/mocha": "^9.1.0",
+    "@types/chai": "^4.3.0",
+    "mocha": "^9.2.2",
+    "chai": "^4.3.6",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.4.0",
+    "prettier": "^2.6.2"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "dist/*"
+      ],
+      "dist/src/lib.d.ts": [
+        "dist/src/lib.d.ts"
+      ]
+    }
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/src/lib.d.ts",
+      "import": "./src/lib.js"
+    },
+    "./src/lib.js": {
+      "types": "./dist/src/lib.d.ts",
+      "import": "./src/lib.js"
+    }
+  },
+  "files": [
+    "src",
+    "dist/src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gozala/reflex.git"
+  },
+  "homepage": "https://github.com/gozala/reflex",
+  "c8": {
+    "exclude": [
+      "test/**",
+      "dist/**"
+    ]
   },
   "lint-staged": {
     "*.js": [
@@ -27,6 +71,5 @@
       "git add"
     ]
   },
-  "repository": "https://github.com/gozala/reflex",
   "license": "MIT"
 }

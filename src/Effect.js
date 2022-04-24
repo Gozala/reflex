@@ -88,7 +88,7 @@ class FX {
         main.send(message)
       }
     } catch (error) {
-      const message = this.failure(error)
+      const message = this.failure(/** @type {X} */(error))
       if (message != null) {
         main.send(message)
       }
